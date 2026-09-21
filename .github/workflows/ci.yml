@@ -9,12 +9,18 @@ on:
 jobs:
   test:
     name: Run Appium/TestNG suite on an Android emulator
-    runs-on: macos-14
-    timeout-minutes: 45
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Enable KVM (hardware-accelerated emulator)
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
 
       - name: Set up JDK 17 (Temurin)
         uses: actions/setup-java@v4
@@ -39,18 +45,16 @@ jobs:
       - name: Run tests on Android emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          # ARM system images are slower to boot on macOS runners than
-          # x86_64 images are on Linux/KVM runners; API 30 boots
-          # noticeably more reliably than API 33 within the default
-          # timeout, and the app under test doesn't rely on anything
-          # API-level-specific. emulator-boot-timeout gives extra margin
-          # on top of that.
-          api-level: 30
+          # KVM-accelerated x86_64 image on a Linux runner: 2-3x faster
+          # and far more reliable to boot than an ARM image on a macOS
+          # runner (Apple Silicon macOS runners don't support nested
+          # HVF acceleration, which made emulator boot consistently
+          # time out there).
+          api-level: 33
           target: google_apis
-          arch: arm64-v8a
+          arch: x86_64
           profile: pixel_5
           force-avd-creation: false
-          emulator-boot-timeout: 900
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           script: |

@@ -173,9 +173,14 @@ appium-java/
 - **CI.** `.github/workflows/ci.yml` runs on every push/PR to `main`: sets
   up JDK 17 and Node, installs Appium + the UiAutomator2 driver, then uses
   [`reactivecircus/android-emulator-runner`](https://github.com/reactivecircus/android-emulator-runner)
-  to boot a real (accelerated, headless) Android emulator on a macOS runner
-  and run `mvn -B test` against it. Surefire reports, failure screenshots,
-  and the Appium server log are uploaded as build artifacts.
+  to boot a real, KVM-accelerated, headless Android emulator (`x86_64`,
+  API 33) on an `ubuntu-latest` runner and run `mvn -B test` against it.
+  Linux + KVM is used rather than macOS in CI because GitHub's Apple
+  Silicon macOS runners don't support nested HVF acceleration, which
+  makes the emulator unreliable to boot there; locally, an `arm64-v8a`
+  image is used instead on Apple Silicon (see Prerequisites above).
+  Surefire reports, failure screenshots, and the Appium server log are
+  uploaded as build artifacts.
 
 ## Why no cloud device farm
 
