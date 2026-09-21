@@ -9,7 +9,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.util.List;
 
 /**
  * Shared explicit-wait helpers for every page object. All navigation between
@@ -29,10 +28,6 @@ public abstract class BasePage {
 
     protected WebElement waitVisible(By locator) {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
-    }
-
-    protected List<WebElement> waitPresentAll(By locator) {
-        return wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(locator));
     }
 
     protected WebElement waitClickable(By locator) {
