@@ -1,0 +1,49 @@
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# Compiled class files
+*.class
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.settings/
+.project
+.classpath
+bin/
+out/
+
+# Logs
+*.log
+logs/
+appium.log
+
+# Test / screenshots
+screenshots/
+test-output/
+
+# Downloaded test app (fetched by apps/download-app.sh, see README)
+apps/*.apk
+
+# Android / emulator
+*.avd/
+.android/
+
+# Node (if Appium is installed locally instead of globally)
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
