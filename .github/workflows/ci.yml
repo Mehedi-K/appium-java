@@ -60,11 +60,7 @@ jobs:
           script: |
             adb wait-for-device
             nohup appium --address 127.0.0.1 --port 4723 > appium.log 2>&1 &
-            for i in $(seq 1 30); do
-              curl -sf http://127.0.0.1:4723/status && break
-              echo "Waiting for Appium server..."
-              sleep 2
-            done
+            for i in $(seq 1 30); do curl -sf http://127.0.0.1:4723/status && break; echo "Waiting for Appium server..."; sleep 2; done
             mvn -B test
         continue-on-error: true
         id: run_tests
