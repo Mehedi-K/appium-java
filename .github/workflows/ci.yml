@@ -39,11 +39,18 @@ jobs:
       - name: Run tests on Android emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 33
+          # ARM system images are slower to boot on macOS runners than
+          # x86_64 images are on Linux/KVM runners; API 30 boots
+          # noticeably more reliably than API 33 within the default
+          # timeout, and the app under test doesn't rely on anything
+          # API-level-specific. emulator-boot-timeout gives extra margin
+          # on top of that.
+          api-level: 30
           target: google_apis
           arch: arm64-v8a
           profile: pixel_5
           force-avd-creation: false
+          emulator-boot-timeout: 900
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           script: |
